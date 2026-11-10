@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <AssemblyName>DinkHelper</AssemblyName>
+    <RootNamespace>DinkHelper</RootNamespace>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
+    <Product>Dink For Discord Helper</Product>
+    <AssemblyTitle>Dink For Discord Helper</AssemblyTitle>
+    <Version>1.0.0</Version>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Net.Http" />
+    <EmbeddedResource Include="icon.ico" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,22 @@
+## Interface: 16001
+## Title: Dink For Discord
+## Notes: Posts your deaths, level ups, loot, boss kills and more to Discord, with screenshots. Needs the free Dink helper app. /dink
+## Author: markp
+## Version: 1.0.0
+## Category: Chat & Communication
+## IconTexture: Interface\AddOns\DinkForDiscord\Media\Icon
+## SavedVariables: DinkForDiscordDB
+## SavedVariablesPerCharacter: DinkForDiscordChar
+## OptionalDeps: Auctionator
+
+Core.lua
+Json.lua
+Strip.lua
+Transport.lua
+Notify.lua
+Notifiers.lua
+Loot.lua
+Social.lua
+Widgets.lua
+UI.lua
+Options.lua
