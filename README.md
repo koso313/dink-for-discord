@@ -6,7 +6,7 @@ A World of Warcraft: Forever addon (plus a small Windows helper) that posts deat
 
 ## Install
 
-1. Install the addon from CurseForge (or copy the `DinkForDiscord` folder into `World of Warcraft/_forever_/Interface/AddOns`).
+1. Install the addon from [CurseForge](https://www.curseforge.com/wow/addons/dink-for-discord) (or copy the `DinkForDiscord` folder into `World of Warcraft/_forever_/Interface/AddOns`).
 2. Download `DinkHelper.exe` from [Releases](https://github.com/koso313/dink-for-discord/releases/latest), unzip, double-click. A bell appears in your tray.
 3. In Discord: Server Settings > Integrations > Webhooks > New Webhook > Copy Webhook URL.
 4. In game: `/dink`, paste the URL, click **Save & Reload**, then **Send test alert**.
