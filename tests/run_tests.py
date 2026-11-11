@@ -344,6 +344,17 @@ def main():
         Image.open(BACKGROUND).convert("RGB").resize((1920, 1080)).save(plain, quality=90)
         check(decode(plain) is None, "normal screenshot is ignored")
 
+        # Compact style: the setting tags each alert so the helper builds the short card.
+        db.general.compact = True
+        ns.SendTest()
+        T.Run(6)
+        db.general.compact = False
+        last = outbox(lua)[-1]
+        check(last.get("sty") == "c", "compact setting tags the alert")
+        ns.SendTest()
+        T.Run(6)
+        check("sty" not in outbox(lua)[-1], "normal style leaves alerts untagged")
+
         print("Helper end to end")
         server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), FakeDiscord)
         port = server.server_address[1]
@@ -367,6 +378,8 @@ def main():
         t0 = int(_time.time()) - 600
         for i, alert in enumerate(live):
             alert = dict(alert, img=1)
+            if i == 2:
+                alert["sty"] = "c"   # one live alert in compact style
             # Re-encode this exact alert with the addon's own encoder.
             T.payloadJson = json.dumps(alert, separators=(",", ":"))
             ns.Strip.Show(T.payloadJson)
@@ -405,8 +418,18 @@ def main():
         with_img = [p for p in posts if p["image"]]
         check(len(with_img) == 3, f"live alerts posted with their screenshot ({len(with_img)})")
         check(all(p["image"][:2] == b"\xff\xd8" for p in with_img), "screenshot uploaded as JPEG")
-        check(all(p["payload"]["embeds"][0]["image"]["url"] == "attachment://screenshot.jpg" for p in with_img),
-              "embed shows the attached screenshot")
+        def shown(p):
+            e = p["payload"]["embeds"][0]
+            return (e.get("image") or e.get("thumbnail") or {}).get("url")
+        check(all(shown(p) == "attachment://screenshot.jpg" for p in with_img), "embed shows the attached screenshot")
+        compact = [p["payload"]["embeds"][0] for p in posts if "footer" not in p["payload"]["embeds"][0]]
+        check(len(compact) == 2, f"compact alerts posted as short cards ({len(compact)})")
+        thumb = [c for c in compact if "thumbnail" in c]
+        check(len(thumb) == 2 and not any("image" in c or "author" in c for c in thumb), "compact card uses a small thumbnail")
+        check(any(c["title"].startswith("🔔 Thrall Stormrider is ready") for c in compact),
+              "compact title is the emoji and message")
+        check(all("Level " in c.get("description", "") and "Paladin" in c.get("description", "") for c in compact),
+              "compact line shows level and class")
         loot_posts = [p for p in posts if p["payload"]["embeds"][0]["title"] in ("Loot", "Shiny Epic Helm", "Thunderfury, Blessed Blade of the Windseeker")]
         check(loot_posts and all(p["path"].startswith("/api/webhooks/2/loot") for p in loot_posts), "loot uses its own webhook override")
         check(not any("example.com" in p["path"] for p in posts), "non-Discord webhook never used")

@@ -2,7 +2,7 @@
 ## Title: Dink For Discord
 ## Notes: Posts your deaths, level ups, loot, boss kills and more to Discord, with screenshots. Needs the free Dink helper app. /dink
 ## Author: markp
-## Version: 1.0.0
+## Version: 1.1.0
 ## Category: Chat & Communication
 ## IconTexture: Interface\AddOns\DinkForDiscord\Media\Icon
 ## SavedVariables: DinkForDiscordDB

@@ -11,6 +11,8 @@ A World of Warcraft: Forever addon (plus a small Windows helper) that posts deat
 3. In Discord: Server Settings > Integrations > Webhooks > New Webhook > Copy Webhook URL.
 4. In game: `/dink`, paste the URL, click **Save & Reload**, then **Send test alert**.
 
+Want smaller posts? Tick **Compact Discord posts** in the Screenshots & delivery tab for a one-line card with a small thumbnail.
+
 Addons can't use the internet, which is why the helper exists. It only reads your Screenshots folder and the addon's saved settings, and only posts to discord.com webhooks. It never touches the game itself.
 
 ## Layout

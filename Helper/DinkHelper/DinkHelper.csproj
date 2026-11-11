@@ -11,7 +11,7 @@
     <ApplicationIcon>icon.ico</ApplicationIcon>
     <Product>Dink For Discord Helper</Product>
     <AssemblyTitle>Dink For Discord Helper</AssemblyTitle>
-    <Version>1.0.0</Version>
+    <Version>1.1.0</Version>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <DebugType>embedded</DebugType>
   </PropertyGroup>

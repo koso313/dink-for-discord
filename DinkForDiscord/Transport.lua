@@ -120,6 +120,7 @@ function Transport.Send(payload, opts)
     opts = opts or {}
     payload.id = payload.id or Transport.NextID()
     payload.img = 0
+    if ns.db.general.compact then payload.sty = "c" end
     SaveOutbox(ns.Json.Encode(payload), payload)
     if not ns.db.general.live then return end
     queue[#queue + 1] = { payload = payload, image = opts.image, at = GetTime() + (opts.delay or 0) }

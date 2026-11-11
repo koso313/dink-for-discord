@@ -212,6 +212,7 @@ local GENERAL_DEFAULTS = {
     highQuality = true,    -- temporarily use the best screenshot quality
     hideChat = false,      -- hide chat windows in screenshots
     keepShots = true,      -- keep the clean screenshot in the Screenshots folder after posting
+    compact = false,       -- short Discord posts: one line of text and a small screenshot on the right
     chatConfirm = true,    -- print a line in chat when an alert is queued
     minimap = true,
     minimapAngle = 200,

@@ -19,7 +19,7 @@ namespace DinkHelper
         public string Id, Type, Title, Message, Player, Class, Zone, Ruleset, Url, AddonVersion;
         public int Level, Color;
         public long Timestamp;
-        public bool HasImage;
+        public bool HasImage, Compact;
         public List<string[]> Fields = new List<string[]>();
         public List<bool> FieldInline = new List<bool>();
 
@@ -36,6 +36,7 @@ namespace DinkHelper
                 Player = S("p") ?? "Someone", Class = S("cls"), Zone = S("zone"), Ruleset = S("rs"),
                 Url = S("url"), AddonVersion = S("ver"),
                 Level = (int)N("lvl"), Color = (int)N("col"), Timestamp = N("ts"), HasImage = N("img") == 1,
+                Compact = S("sty") == "c",
             };
             if (d.TryGetValue("fields", out var f) && f is object[] list)
                 foreach (var item in list)
@@ -57,7 +58,7 @@ namespace DinkHelper
         static Discord()
         {
             ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
-            Http.DefaultRequestHeaders.UserAgent.ParseAdd("DinkForDiscordHelper/1.0");
+            Http.DefaultRequestHeaders.UserAgent.ParseAdd("DinkForDiscordHelper/1.1");
         }
 
         static readonly Regex WebhookPattern = new Regex(
@@ -79,9 +80,40 @@ namespace DinkHelper
 
         static string Cut(string s, int max) => s == null ? null : s.Length <= max ? s : s.Substring(0, max - 1) + "…";
 
+        static readonly Dictionary<string, string> Emoji = new Dictionary<string, string>
+        {
+            ["DEATH"] = "\U0001F480", ["LEVEL"] = "\U0001F389", ["LOOT"] = "\U0001F4B0", ["QUEST"] = "\U0001F4DC",
+            ["BOSS"] = "⚔️", ["SKILL"] = "\U0001F6E0️", ["REP"] = "\U0001F91D", ["COLLECTION"] = "\U0001F984",
+            ["LEGACY"] = "\U0001F3C6", ["PVP"] = "\U0001F5E1️", ["GOLD"] = "\U0001FA99", ["TRADE"] = "\U0001F501",
+            ["AUCTION"] = "\U0001F528", ["CHAT"] = "\U0001F4AC", ["TEST"] = "\U0001F514",
+        };
+
+        /// <summary>Short card: emoji + message as the title, one detail line, screenshot as a small thumbnail.</summary>
+        static Dictionary<string, object> BuildCompact(Alert a, string className, bool withImage)
+        {
+            string text = string.IsNullOrWhiteSpace(a.Message) ? a.Title ?? "Dink" : a.Message.Replace("\r", "").Replace("\n", " ");
+            string title = (Emoji.TryGetValue(a.Type ?? "", out var e) ? e + " " : "") + text;
+            var details = new List<string>();
+            if (a.Level > 0) details.Add($"Level {a.Level}" + (className != null ? " " + className : ""));
+            if (!string.IsNullOrEmpty(a.Zone)) details.Add(a.Zone);
+            if (!string.IsNullOrEmpty(a.Ruleset) && a.Ruleset != "Normal") details.Add(a.Ruleset);
+            string desc = string.Join(" · ", details);
+            if (a.Fields.Count > 0)
+            {
+                string extra = string.Join(" · ", a.Fields.Take(6).Select(f => string.IsNullOrEmpty(f[1]) ? f[0] : $"{f[0]}: {f[1]}"));
+                desc = desc.Length > 0 ? desc + "\n" + Cut(extra, 300) : Cut(extra, 300);
+            }
+            var embed = new Dictionary<string, object> { ["title"] = Cut(title, 256), ["color"] = a.Color & 0xFFFFFF };
+            if (desc.Length > 0) embed["description"] = desc;
+            if (!string.IsNullOrEmpty(a.Url) && Uri.TryCreate(a.Url, UriKind.Absolute, out var u) && u.Scheme == "https") embed["url"] = a.Url;
+            if (withImage) embed["thumbnail"] = new Dictionary<string, object> { ["url"] = "attachment://screenshot.jpg" };
+            return new Dictionary<string, object> { ["embeds"] = new[] { embed } };
+        }
+
         public static Dictionary<string, object> BuildPayload(Alert a, bool withImage)
         {
             string className = a.Class != null && ClassNames.TryGetValue(a.Class, out var cn) ? cn : null;
+            if (a.Compact) return BuildCompact(a, className, withImage);
             string author = a.Player;
             if (a.Level > 0) author += $" • Level {a.Level}" + (className != null ? " " + className : "");
             var embed = new Dictionary<string, object>

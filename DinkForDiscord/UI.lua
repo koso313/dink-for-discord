@@ -408,6 +408,8 @@ function UI:BuildDelivery(p)
     end
     check("Send alerts within seconds", "live",
         "For each alert the addon takes one extra screenshot with a small data code in the corner. The helper reads it, posts the alert and deletes that screenshot. Turn off to post only when you /reload, log out or quit.")
+    check("Compact Discord posts", "compact",
+        "One line of text with a small screenshot on the right, instead of a big card. Click the picture in Discord to see it full size.")
     check("Use the best screenshot quality", "highQuality",
         "Screenshot quality is raised for a moment while an alert is captured, then put back.")
     check("Hide chat windows in screenshots", "hideChat",

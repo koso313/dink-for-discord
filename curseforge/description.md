@@ -25,6 +25,8 @@ Inspired by the Dink plugin for RuneLite (Old School RuneScape). Not affiliated 
 
 Every alert can have its own screenshot setting, message template (`%PLAYER% has reached level %LEVEL%!`) and its own webhook.
 
+Prefer smaller posts? Turn on **Compact Discord posts** (Screenshots & delivery tab) for a one-line card with a small screenshot thumbnail. Click the thumbnail in Discord to see it full size.
+
 ## Setup (2 minutes)
 
 1. **Install the addon** (this page) and the free **Dink For Discord Helper** for Windows (link below).
@@ -51,3 +53,8 @@ The helper does **not** read game memory, inject anything, send key presses or t
 **[Download DinkHelper.exe (GitHub releases)](https://github.com/koso313/dink-for-discord/releases/latest)**
 
 Unzip it anywhere and double-click. Windows may say "Windows protected your PC" because the app isn't signed: click **More info > Run anyway**. Source code: [github.com/koso313/dink-for-discord](https://github.com/koso313/dink-for-discord)
+
+## Changes
+
+- **1.1.0** Compact Discord posts option: one line of text and a small screenshot on the right. Update the helper too.
+- **1.0.0** First release.
